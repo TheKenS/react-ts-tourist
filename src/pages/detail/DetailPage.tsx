@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { RouteComponentProps, useParams } from "react-router-dom";
-import axios from "axios";
 import { Spin, Row, Col, Divider, Typography, Anchor, Menu } from "antd";
 import styles from "./DetailPage.module.css";
 import {
@@ -11,7 +10,10 @@ import {
 } from "../../components";
 import { DatePicker, Space } from "antd";
 import { commentMockData } from "./mockup";
-import { productDetailSlice } from "@/redux/productDetail/slice";
+import {
+  productDetailSlice,
+  getProductDetail,
+} from "@/redux/productDetail/slice";
 import { useSelector } from "@/redux/hooks";
 import { useDispatch } from "react-redux";
 
@@ -35,15 +37,7 @@ export const DetailPage: React.FC<RouteComponentProps<MatchParams>> = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      dispatch(productDetailSlice.actions.fetchStart());
-      try {
-        const { data } = await axios.get(
-          `http://123.56.149.216:8080/api/touristRoutes/${touristRouteId}`
-        );
-        dispatch(productDetailSlice.actions.fetchSuccess(data));
-      } catch (error) {
-        dispatch(productDetailSlice.actions.fetchFail(error.message));
-      }
+      dispatch(getProductDetail(touristRouteId));
     };
     fetchData();
   }, []);

@@ -17,6 +17,7 @@ import { withTranslation, WithTranslation } from "react-i18next";
 import { connect } from "react-redux";
 import { RootState } from "@/redux/store";
 import { giveMeDataActionCreator } from "../../redux/recommendProducts/recommendProductsActions";
+import { MainLayout } from "@/layouts/mainLayout";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -66,8 +67,7 @@ class HomePageComponent extends React.Component<PropsType> {
     }
 
     return (
-      <>
-        <Header />
+      <MainLayout>
         {/* 页面内容 content */}
         <div className={styles["page-content"]}>
           <Row style={{ marginTop: 20 }}>
@@ -107,8 +107,7 @@ class HomePageComponent extends React.Component<PropsType> {
           />
           <BusinessPartners />
         </div>
-        <Footer />
-      </>
+      </MainLayout>
     );
   }
 }

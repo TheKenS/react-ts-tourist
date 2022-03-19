@@ -16,6 +16,7 @@ import {
 } from "@/redux/productDetail/slice";
 import { useSelector } from "@/redux/hooks";
 import { useDispatch } from "react-redux";
+import { MainLayout } from "@/layouts/mainLayout";
 
 const { RangePicker } = DatePicker;
 
@@ -59,8 +60,7 @@ export const DetailPage: React.FC<RouteComponentProps<MatchParams>> = () => {
     return <div>网站出错：{error}</div>;
   }
   return (
-    <>
-      <Header />
+    <MainLayout>
       <div className={styles["page-content"]}>
         {/* 产品简介 与 日期选择 */}
         <div className={styles["product-intro-container"]}>
@@ -139,7 +139,6 @@ export const DetailPage: React.FC<RouteComponentProps<MatchParams>> = () => {
           </div>
         </div>
       </div>
-      <Footer />
-    </>
+    </MainLayout>
   );
 };

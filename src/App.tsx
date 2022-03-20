@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./App.module.css";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import {
@@ -7,9 +7,35 @@ import {
   RegisterPage,
   DetailPage,
   SearchPage,
+  ShoppingCartPage,
+  PlaceOrderPage,
 } from "./pages";
+import { Redirect } from "react-router-dom";
+import { useSelector } from "./redux/hooks";
+import { useDispatch } from "react-redux";
+import { getShoppingCart } from "./redux/shoppingCart/slice";
+
+const PrivateRoute = ({ component, isAuthencated, ...rest }) => {
+  const routeComponent = (props) => {
+    return isAuthencated ? (
+      React.createElement(component, props)
+    ) : (
+      <Redirect to={{ pathname: "/signIn" }} />
+    );
+  };
+  return <Route render={routeComponent} {...rest} />;
+};
 
 function App() {
+  const jwt = useSelector((s) => s.user.token);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (jwt) {
+      dispatch(getShoppingCart(jwt));
+    }
+  }, [jwt]);
+
   return (
     <div className={styles.App}>
       <BrowserRouter>
@@ -20,6 +46,16 @@ function App() {
           <Route path="/detail/:touristRouteId" component={DetailPage} />
           {/* ?代表keywords是可选的 */}
           <Route path="/search/:keywords?" component={SearchPage} />
+          <PrivateRoute
+            isAuthencated={jwt !== null}
+            path="/shoppingCart"
+            component={ShoppingCartPage}
+          />
+          <PrivateRoute
+            isAuthencated={jwt !== null}
+            path="/placeOrder"
+            component={PlaceOrderPage}
+          />
           <Route render={() => <h1>404 not found 页面去火星了 ！</h1>} />
         </Switch>
       </BrowserRouter>
